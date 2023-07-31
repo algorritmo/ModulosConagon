@@ -14,7 +14,7 @@
       overflow-x: scroll;
       overflow-y: hidden;
       width: 100%;
-      height: 180px;
+      height: 150px;
       white-space: nowrap;
       margin: 10px;
     }
@@ -99,15 +99,6 @@
       padding: 0 6px 0 0;
     }
 
-    .settingsBar {
-      padding-top: 8px;
-      font: 14px "Open Sans", "Lucida Grande", "Arial", sans-serif;
-      position: relative;
-      vertical-align: middle;
-      width: 100%;
-      height: 60px;
-    }
-
     .left {
       width: 50%;
       position: absolute;
@@ -139,24 +130,41 @@
 
     .envelope-fieldset {
       padding-top: 8px;
-      position: relative;
+      width: 25%;
       font: 18px "Open Sans", "Lucida Grande", "Arial", sans-serif;
-      left: 0;
-      display: table-cell;
+      display: table;
       border-style: solid;
-      vertical-align: middle;
       border-color: #000;
       background-color: #eee;
+      margin: 0 auto;
+      /* This will center the fieldset horizontally */
     }
+
 
     .table-border-none,
     .table-border-none td {
       font: 14px "Open Sans", "Lucida Grande", "Arial", sans-serif;
-      left: 0;
       width: 45%;
       vertical-align: middle;
       white-space: nowrap;
       border: none;
+    }
+
+    .range-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .range-label {
+      font-size: 12px;
+    }
+
+    input[type="range"][orient="vertical"] {
+      writing-mode: bt-lr;
+      width: 100px;
+      appearance: slider-vertical;
     }
 
 
@@ -166,6 +174,8 @@
 
     .container1 {
       display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .oscilador-container,
@@ -173,8 +183,25 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 50%;
+      width: 33.33%;
       margin: 10px;
+    }
+
+    .center-column {
+      display: flex;
+      justify-content: center;
+      width: 11%;
+      margin: 10px;
+      align-items: center;
+    }
+
+    .settingsBar {
+      padding-top: 8px;
+      font: 14px "Open Sans", "Lucida Grande", "Arial", sans-serif;
+      position: relative;
+      vertical-align: middle;
+      height: 60px;
+      width: 50%;
     }
 
     /* Switch Togle*/
@@ -240,39 +267,129 @@
     .slider.round:before {
       border-radius: 50%;
     }
+
+    /* Estilos para ubicación de las imagenes */
+    .image-overlay {
+      position: relative;
+      top: -170px;
+      left: -50px;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      pointer-events: none;
+      display: none;
+    }
+
+    .image-overlay img {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .image-overlay-2 {
+      position: relative;
+      top: -170px;
+      left: -50px;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      pointer-events: none;
+      display: none;
+    }
+
+    .image-overlay-2 img {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
   </style>
 </head>
 
 <body>
   <div class="container1">
     <div class="oscilador-container">
-      <!-- Contenido del primer oscilador -->
       <h2>Forma de Onda Oscilador 1</h2>
-      <!--<input id="frequency-slider1" type="range" min="0" max="1000" step="10">-->
+      <Label>Frecuencia</Label>
+      <input id="frequency-slider1" type="range" min="0" max="1000" step="10">OSC1</input>
       <input id="waveform-knob1" type="text" value="0">
       <Label>OFF/ON</Label>
-      <!-- Rounded switch -->
       <label class="switch">
         <input type="checkbox" id="btnOnOsc1" value="false">
         <span class="slider round"></span>
       </label>
+      <div class="image-overlay" id="imageOverlay1">
+        <img src="./images/sin.png" alt="sin.png">
+      </div>
+      <div class="image-overlay" id="imageOverlay2">
+        <img src="./images/square.png" alt="square.png">
+      </div>
+      <div class="image-overlay" id="imageOverlay3">
+        <img src="./images/sawtooth.png" alt="sawtooth.png">
+      </div>
+      <div class="image-overlay" id="imageOverlay4">
+        <img src="./images/triangulo.png" alt="triangulo.png">
+      </div>
+      <div class="image-overlay" id="imageOverlayDefault">
+        <img src="./images/default.png" alt="default.png">
+      </div>
+    </div>
+    <div class="center-column">
+      <div class="settingsBar">
+        <div class="left">
+          <table class="table-border-none">
+
+            <tr>
+              <td>
+                <label for="attack-range">Volumen Master</label>
+                <div class="range-container">
+                  <span class="range-label">100%</span>
+                  <input type="range" id="attack-range" min="0.0" max="1.0" step="0.01" value="0.5" orient="vertical"
+                    name="volume">
+                  <span class="range-label">Mute</span>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <!--
+        <div class="right">
+          <span>Current waveform: </span>
+          <select name="waveform">
+            <option value="sine">Sine</option>
+            <option value="square">Square</option>
+            <option value="sawtooth">Sawtooth</option>
+            <option value="triangle" selected>Triangle</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        -->
+      </div>
     </div>
 
     <div class="knob-container">
-      <!-- Contenido del segundo oscilador -->
       <h2>Forma de Onda Oscilador 2</h2>
-      <!--<input id="frequency-slider2" type="range" min="0" max="1000" step="10"> -->
+      <Label>Frecuencia</Label>
+      <input id="frequency-slider2" type="range" min="0" max="1000" step="10">OSC2</input>
       <input id="waveform-knob2" type="text" value="0">
       <Label>OFF/ON</Label>
-      <!-- Rounded switch -->
       <label class="switch">
         <input type="checkbox" id="btnOnOsc2" value="false">
         <span class="slider round"></span>
       </label>
+      <div class="image-overlay-2" id="image2Overlay1">
+        <img src="./images/sin.png" alt="sin.png">
+      </div>
+      <div class="image-overlay-2" id="image2Overlay2">
+        <img src="./images/square.png" alt="square.png">
+      </div>
+      <div class="image-overlay-2" id="image2Overlay3">
+        <img src="./images/sawtooth.png" alt="sawtooth.png">
+      </div>
+      <div class="image-overlay-2" id="image2Overlay4">
+        <img src="./images/triangulo.png" alt="triangulo.png">
+      </div>
+      <div class="image-overlay-2" id="image2OverlayDefault">
+        <img src="./images/default.png" alt="default.png">
+      </div>
     </div>
-  </div>
-  <div class="container">
-    <div class="keyboard"></div>
   </div>
 
   <fieldset class="envelope-fieldset">
@@ -280,65 +397,62 @@
 
     <table class="table-border-none">
       <tr>
-        <td>Attack:<br />(Time)</td>
-        <td>0%</td>
-        <td><input type="range" min="0.0" max="1.0" step="0.01" value="0.1" name="attack"></td>
-        <td>100%</td>
+        <td>
+          <label for="attack-range">Attack:(Time)</label>
+          <div class="range-container">
+            <span class="range-label">100%</span>
+            <input type="range" id="attack-range" min="0.0" max="1.0" step="0.01" value="0.1" orient="vertical"
+              name="attack">
+            <span class="range-label">0%</span>
+          </div>
+        </td>
 
-        <td>Release:<br />(Time)</td>
-        <td>0%</td>
-        <td><input type="range" min="0.0" max="1.0" step="0.01" value="0.5" name="release"></td>
-        <td>100%</td>
-      </tr>
+        <td>
+          <label for="release-range">Release:(Time)</label>
+          <div class="range-container">
+            <span class="range-label">100%</span>
+            <input type="range" id="release-range" min="0.0" max="1.0" step="0.01" value="0.5" orient="vertical"
+              name="release">
+            <span class="range-label">0%</span>
+          </div>
+        </td>
 
-      <tr>
-        <td>Decay:<br />(Time)</td>
-        <td>0%</td>
-        <td><input type="range" min="0.0" max="1.0" step="0.01" value="0.5" name="decay"></td>
-        <td>100%</td>
+        <td>
+          <label for="decay-range">Decay:(Time)</label>
+          <div class="range-container">
+            <span class="range-label">100%</span>
+            <input type="range" id="decay-range" min="0.0" max="1.0" step="0.01" value="0.5" orient="vertical"
+              name="decay">
+            <span class="range-label">0%</span>
+          </div>
+        </td>
 
-        <td>Time<br />Scale:</td>
-        <td>0.0(s)</td>
-        <td><input type="range" min="0.0" max="2.0" step="0.01" value="1.0" name="time-scale"></td>
-        <td>2.0(s)</td>
-      </tr>
+        <td>
+          <label for="sustain-range">Sustain:(Volume)</label>
+          <div class="range-container">
+            <span class="range-label">100%</span>
+            <input type="range" id="sustain-range" min="0.0" max="1.0" step="0.01" value="0.5" orient="vertical"
+              name="sustain">
+            <span class="range-label">0%</span>
+          </div>
+        </td>
 
-      <tr>
-        <td>Sustain:<br />(Volume)</td>
-        <td>0%</td>
-        <td><input type="range" min="0.0" max="1.0" step="0.01" value="0.5" name="sustain"></td>
-        <td>100%</td>
+        <td>
+          <label for="time-scale-range">Time Scale:</label>
+          <div class="range-container">
+            <span class="range-label">2.0</span>
+            <input type="range" id="time-scale-range" min="0.0" max="2.0" step="0.01" value="1.0" orient="vertical"
+              name="time-scale">
+            <span class="range-label">0.0</span>
+          </div>
+        </td>
 
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
       </tr>
     </table>
   </fieldset>
 
-  <div class="settingsBar">
-    <div class="left">
-      <table class="table-border-none">
-        <tr>
-          <td>Volume: </td>
-          <td>Mute<input type="range" min="0.0" max="1.0" step="0.01" value="0.5" name="volume">100%</td>
-        </tr>
-      </table>
-    </div>
-
-    <!--
-    <div class="right">
-      <span>Current waveform: </span>
-      <select name="waveform">
-        <option value="sine">Sine</option>
-        <option value="square">Square</option>
-        <option value="sawtooth">Sawtooth</option>
-        <option value="triangle" selected>Triangle</option>
-        <option value="custom">Custom</option>
-      </select>
-    </div>
-    -->
+  <div class="container">
+    <div class="keyboard"></div>
   </div>
 
   <script>
@@ -349,8 +463,18 @@
 
     var oscillator1;
     var oscillator2;
-
-
+    //variables para el manejo de imagenes:
+    const input1 = document.getElementById('waveform-knob1');
+    const imageOverlay1 = document.getElementById('imageOverlay1');
+    const imageOverlay2 = document.getElementById('imageOverlay2');
+    const imageOverlay3 = document.getElementById('imageOverlay3');
+    const imageOverlay4 = document.getElementById('imageOverlay4');
+    const imageOverlayDefault = document.getElementById('imageOverlayDefault');
+    const imgOsci1 = document.getElementById('image2Overlay1');
+    const imgOsci2 = document.getElementById('image2Overlay2');
+    const imgOsci3 = document.getElementById('image2Overlay3');
+    const imgOsci4 = document.getElementById('image2Overlay4');
+    const imgOsci2Default = document.getElementById('image2OverlayDefault');
 
     // Variable para controlar el estado de la tecla (inicialmente, ninguna tecla está presionada)
     let keyIsPressed = false;
@@ -378,19 +502,47 @@
       'step': 1,
       'change': function (value) {
         if (oscillator1 || audioContext) {
-          console.log('valor default' + parseInt(value));
+          console.log('valor default ' + parseInt(value));
           switch (parseInt(value)) {
             case 0:
+              // Cambio de imagenes según el caso:
+              imageOverlay1.style.display = 'block';
+              imageOverlay2.style.display = 'none';
+              imageOverlay3.style.display = 'none';
+              imageOverlay4.style.display = 'none';
+              imageOverlayDefault.style.display = 'none';
               wavePicker1 = 'sine'; // Senoidal
               break;
             case 1:
+              imageOverlay1.style.display = 'none';
+              imageOverlay2.style.display = 'block';
+              imageOverlay3.style.display = 'none';
+              imageOverlay4.style.display = 'none';
+              imageOverlayDefault.style.display = 'none';
               wavePicker1 = 'square'; // Cuadrada
               break;
             case 2:
+              imageOverlay1.style.display = 'none';
+              imageOverlay2.style.display = 'none';
+              imageOverlay3.style.display = 'block';
+              imageOverlay4.style.display = 'none';
+              imageOverlayDefault.style.display = 'none';
               wavePicker1 = 'sawtooth'; // Triangular
               break;
             case 3:
+              imageOverlay1.style.display = 'none';
+              imageOverlay2.style.display = 'none';
+              imageOverlay3.style.display = 'none';
+              imageOverlay4.style.display = 'block';
+              imageOverlayDefault.style.display = 'none';
               wavePicker1 = 'triangle'; // Diente de sierra
+              break;
+            default:
+              imageOverlay1.style.display = 'none';
+              imageOverlay2.style.display = 'none';
+              imageOverlay3.style.display = 'none';
+              imageOverlay4.style.display = 'none';
+              imageOverlayDefault.style.display = 'block';
               break;
           }
         }
@@ -406,19 +558,111 @@
           console.log('valor default' + parseInt(value));
           switch (parseInt(value)) {
             case 0:
+              //Cambio de imagenes según el caso
+              image2Overlay1.style.display = 'block';
+              image2Overlay2.style.display = 'none';
+              image2Overlay3.style.display = 'none';
+              image2Overlay4.style.display = 'none';
+              image2OverlayDefault.style.display = 'none';
               wavePicker2 = 'sine'; // Senoidal
               break;
             case 1:
+              image2Overlay1.style.display = 'none';
+              image2Overlay2.style.display = 'block';
+              image2Overlay3.style.display = 'none';
+              image2Overlay4.style.display = 'none';
+              image2OverlayDefault.style.display = 'none';
               wavePicker2 = 'square'; // Cuadrada
               break;
             case 2:
+              image2Overlay1.style.display = 'none';
+              image2Overlay2.style.display = 'none';
+              image2Overlay3.style.display = 'block';
+              image2Overlay4.style.display = 'none';
+              image2OverlayDefault.style.display = 'none';
               wavePicker2 = 'sawtooth'; // Triangular
               break;
             case 3:
+              image2Overlay1.style.display = 'none';
+              image2Overlay2.style.display = 'none';
+              image2Overlay3.style.display = 'none';
+              image2Overlay4.style.display = 'block';
+              image2OverlayDefault.style.display = 'none';
               wavePicker2 = 'triangle'; // Diente de sierra
+              break;
+            default:
+              image2Overlay1.style.display = 'none';
+              image2Overlay2.style.display = 'none';
+              image2Overlay3.style.display = 'none';
+              image2Overlay4.style.display = 'none';
+              image2OverlayDefault.style.display = 'block';
               break;
           }
         }
+      }
+    });
+
+    //Eventos que ponene por defecto la imgen del pianito
+    document.addEventListener('DOMContentLoaded', function () {
+      const imageOverlayDefault = document.getElementById('imageOverlayDefault');
+      imageOverlayDefault.style.display = 'block';
+
+      const imageOverlays = document.querySelectorAll('.image-overlay');
+      imageOverlays.forEach(function (imageOverlay) {
+        if (imageOverlay !== imageOverlayDefault) {
+          imageOverlay.style.display = 'none';
+        }
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const image2OverlayDefault = document.getElementById('image2OverlayDefault');
+      image2OverlayDefault.style.display = 'block';
+
+      const imageOverlays2 = document.querySelectorAll('.image-overlay-2');
+      imageOverlays2.forEach(function (imageOverlay2) {
+        if (imageOverlay2 !== image2OverlayDefault) {
+          imageOverlay2.style.display = 'none';
+        }
+      });
+    });
+
+    // Evento que cambia las imagenes según el input
+    // que se ingrese manualmente
+    input1.addEventListener('input', function () {
+      const inputValue = parseFloat(input1.value);
+
+      if (inputValue === 1) {
+        imageOverlay1.style.display = 'block';
+        imageOverlay2.style.display = 'none';
+        imageOverlay3.style.display = 'none';
+        imageOverlay4.style.display = 'none';
+        imageOverlayDefault.style.display = 'none';
+      } else if (inputValue === 2) {
+        imageOverlay1.style.display = 'none';
+        imageOverlay2.style.display = 'block';
+        imageOverlay3.style.display = 'none';
+        imageOverlay4.style.display = 'none';
+        imageOverlayDefault.style.display = 'none';
+      } else if (inputValue === 3) {
+        imageOverlay1.style.display = 'none';
+        imageOverlay2.style.display = 'none';
+        imageOverlay3.style.display = 'block';
+        imageOverlay4.style.display = 'none';
+        imageOverlayDefault.style.display = 'none';
+      } else if (inputValue === 4) {
+        imageOverlay1.style.display = 'none';
+        imageOverlay2.style.display = 'none';
+        imageOverlay3.style.display = 'none';
+        imageOverlay4.style.display = 'block';
+        imageOverlayDefault.style.display = 'none';
+      } else {
+        // Display the default image
+        imageOverlay1.style.display = 'none';
+        imageOverlay2.style.display = 'none';
+        imageOverlay3.style.display = 'none';
+        imageOverlay4.style.display = 'none';
+        imageOverlayDefault.style.display = 'block';
       }
     });
 
