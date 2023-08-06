@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <title>Reproducir onda con Web Audio API y analizador de onda</title>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+    <script>
+      function reproducirOnda() {
+        // Crear el contexto de audio
+        let audioContext = new AudioContext();
+
+        // Crear un nodo Oscillator
+        let oscillatorNode = audioContext.createOscillator();
+
+        // Crear un nodo Gain
+        let gainNode = audioContext.createGain();
+
+        // Conectar el nodo Oscillator al nodo Gain y luego al destino de audio
+        oscillatorNode.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        // Obtener los elementos del DOM
+        let frequencySlider = document.getElementById("frequency-slider");
+        let amplitudeSlider = document.getElementById("amplitude-slider");
+        let frequencyValue = document.getElementById("frequency-value");
+        let amplitudeValue = document.getElementById("amplitude-value");
+
+        // Configurar los valores iniciales de los sliders
+        frequencySlider.value = oscillatorNode.frequency.value;
+        amplitudeSlider.value = gainNode.gain.value;
+
+        // Actualizar la frecuencia y amplitud de la onda cuando el usuario mueve los sliders
+        frequencySlider.addEventListener("input", function() {
+          oscillatorNode.frequency.setValueAtTime(frequencySlider.value, audioContext.currentTime);
+          frequencyValue.innerHTML = frequencySlider.value;
+        });
+
+        amplitudeSlider.addEventListener("input", function() {
+          gainNode.gain.setValueAtTime(amplitudeSlider.value, audioContext.currentTime);
+          amplitudeValue.innerHTML = amplitudeSlider.value;
+        });
+
+        // Crear un analizador de onda
+        let analyserNode = audioContext.createAnalyser();
+
+        // Configurar el analizador de onda
+        analyserNode.fftSize = 2048;
+        let bufferLength = analyserNode.frequencyBinCount;
+        let dataArray = new Uint8Array(bufferLength);
+
+        // Conectar el nodo Gain al analizador de onda y luego al destino de audio
+        gainNode.connect(analyserNode);
+        analyserNode.connect(audioContext.destination);
+
+        // Obtener el canvas del DOM
+        let canvas = document.getElementById("waveform");
+        let canvasContext = canvas.getContext("2d");
+
+        // Dibujar la onda
+        function drawWaveform() {
+          requestAnimationFrame(drawWaveform);
+
+          analyserNode.getByteTimeDomainData(dataArray);
+
+          canvasContext.fillStyle = "blue";
+          canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+
+          canvasContext.lineWidth = 2;
+          canvasContext.strokeStyle = "black";
+
+          canvasContext.beginPath();
+
+          let sliceWidth = canvas.width / bufferLength;
+          let x = 0;
+
+          for(let i = 0; i < bufferLength; i++) {
+            let v = dataArray[i] / 128.0;
+            let y = v * canvas.height / 2;
+
+            if(i === 0) {
+              canvasContext.moveTo(x, y);
+            } else {
+              canvasContext.lineTo(x, y);
+            }
+
+            x += sliceWidth;
+          }
+
+          canvasContext.lineTo(canvas.width, canvas.height / 2);
+          canvasContext.stroke();
+        }
+
+        drawWaveform();
+
+        // Iniciar la onda
+        oscillatorNode.start();
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Modificar frecuencia y amplitud de onda con Web Audio API</h1>
+  
+    <div>
+      <label for="frequency-slider">Frecuencia:</label>
+      <input id="frequency-slider" type="range" min="20" max="2000" step="1">
+      <span id="frequency-value">440</span> Hz
+    </div>
+    
+    <div>
+      <label for="amplitude-slider">Amplitud:</label>
+      <input id="amplitude-slider" type="range" min="0" max="1" step="0.01">
+      <span id="amplitude-value">0.5</span>
+    </div>
+    
+    <div>
+      <canvas id="waveform" width="600" height="300"></canvas>
+    </div>
+    
+    <button onclick="reproducirOnda()">Reproducir onda</button>
+  </body>
+</html>
+
+
+
+
