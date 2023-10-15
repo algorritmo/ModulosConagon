@@ -8,28 +8,48 @@
 
 <body>
     <div style="text-align: center;">
-        <h1 style="font-family: 'comic sans ms', sans-serif; ">Interactúa con la onda fundamental, observa la afectación sonora y visual de modificar la frecuencia y la amplitud</h1>
-        <div><label style="font-family: 'comic sans ms', sans-serif;" for="frequency-slider">Frecuencia:</label> <input id="frequency-slider" type="range" min="20" max="22000"
-                step="1" /> <span id="frequency-value">440</span> Hz</div>
-        <div><label style="font-family: 'comic sans ms', sans-serif;" for="amplitude-slider">Amplitud:</label> <input id="amplitude-slider" type="range" min="0" max="1"
-                step="0.01" /> <span id="amplitude-value">0.5</span> dB</div>
-                <div style="border-radius: 15px; padding: 10px;"></div>
-        <div><label style="font-family: 'comic sans ms', sans-serif;">Espectro del sonido</label></div>
-    
-        <div><canvas id="waveform" width="600" height="300" style="border:1px solid #121574;"></canvas></div>
-        </p><button style="border-radius: 15px; padding: 10px; font-family: 'comic sans ms', sans-serif; background-color: rgb(0%, 244%, 227%); 
-        color: black; text-decoration: none; box-shadow: 3px 3px 5px grey;" onclick="reproducirOnda()">Reproducir sonido</button></p>
-        </p><button style="border-radius: 15px; padding: 10px; font-family: 'comic sans ms', sans-serif; background-color: rgb(0%, 244%, 227%); 
-        color: black; text-decoration: none; box-shadow: 3px 3px 5px grey;" onclick="detenerOnda()">Detener sonido</button></p>
+        <h1 style="font-family: 'comic sans ms', sans-serif; ">Interactúa con la onda fundamental, observa la afectación
+            sonora y visual de modificar la frecuencia y la amplitud
+        </h1>
+        <div>
+            <label style="font-family: 'comic sans ms', sans-serif;" for="frequency-slider">Frecuencia:</label>
+            <input id="frequency-slider" type="range" style="accent-color: #F0A762" min="20" max="22000" step="1" />
+            <span id="frequency-value" contenteditable="true">440</span> Hz
+        </div>
+        <div>
+            <label style="font-family: 'comic sans ms', sans-serif;" for="amplitude-slider">Amplitud:</label>
+            <input id="amplitude-slider" type="range" style="accent-color: #F0A762" min="0" max="1" step="0.01" />
+            <span id="amplitude-value">0.5</span>dB
+        </div>
+        <div style="border-radius: 15px; padding: 10px;"></div>
+        <div>
+            <label style="font-family: 'comic sans ms', sans-serif;">Espectro del sonido</label>
+        </div>
+
+        <div>
+            <canvas id="waveform" width="600" height="300" style="border:1px solid #121574;"></canvas>
+        </div>
+        </p>
+        <button style="border-radius: 15px; padding: 10px; font-family: 'comic sans ms', sans-serif; background-color: rgb(0%, 244%, 227%); 
+            color: black; text-decoration: none; box-shadow: 3px 3px 5px grey;" onclick="reproducirOnda()">
+            Reproducir sonido
+        </button>
+        </p>
+        </p>
+        <button style="border-radius: 15px; padding: 10px; font-family: 'comic sans ms', sans-serif; background-color: rgb(0%, 244%, 227%); 
+            color: black; text-decoration: none; box-shadow: 3px 3px 5px grey;" onclick="detenerOnda()">
+            Detener sonido
+        </button>
+        </p>
 
     </div>
- 
+
     <script>
-            let audioContext;
-            let oscillatorNode;
-            let gainNode;
-            let analyserNode;
-            function reproducirOnda() {
+        let audioContext;
+        let oscillatorNode;
+        let gainNode;
+        let analyserNode;
+        function reproducirOnda() {
             // Crear el contexto de audio
             audioContext = new AudioContext();
 
@@ -51,9 +71,12 @@
             let frequencyValue = document.getElementById("frequency-value");
             let amplitudeValue = document.getElementById("amplitude-value");
 
+
+
             // Configurar los valores iniciales de los sliders
             frequencySlider.value = oscillatorNode.frequency.value;
             amplitudeSlider.value = gainNode.gain.value;
+
 
             // Actualizar la frecuencia y amplitud de la onda cuando el usuario mueve los sliders
             frequencySlider.addEventListener("input", function () {
@@ -61,6 +84,16 @@
                 frequencyValue.innerHTML = frequencySlider.value;
             });
 
+
+          // Agrega un controlador de eventos para el cambio de valor en el span editable
+frequencyValue.addEventListener("blur", function () {
+    const newValue = parseFloat(frequencyValue.innerText); // Convierte el contenido en un número
+    if (!isNaN(newValue) && newValue >= parseFloat(frequencySlider.min) && newValue <= parseFloat(frequencySlider.max)) {
+        // Verifica si el nuevo valor es un número válido dentro del rango del control deslizante
+        frequencySlider.value = newValue; // Actualiza el valor del control deslizante
+        oscillatorNode.frequency.setValueAtTime(newValue, audioContext.currentTime); // Actualiza el oscilador de audio
+    }
+});
             amplitudeSlider.addEventListener("input", function () {
                 gainNode.gain.setValueAtTime(amplitudeSlider.value, audioContext.currentTime);
                 amplitudeValue.innerHTML = amplitudeSlider.value;
@@ -116,7 +149,7 @@
                 canvasContext.stroke();
             }
 
-            
+
 
             drawWaveform();
 
@@ -125,11 +158,11 @@
         }
 
         function detenerOnda() {
-        if (oscillatorNode) {
-            oscillatorNode.stop();
-            oscillatorNode.disconnect();
+            if (oscillatorNode) {
+                oscillatorNode.stop();
+                oscillatorNode.disconnect();
+            }
         }
-    }
 
     </script>
 </body>
